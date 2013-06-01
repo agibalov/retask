@@ -1,0 +1,114 @@
+﻿@using Service.DTO;
+@model DebugDTO
+
+<div class="container">
+    <div class="page-header">
+        <h2>Users <small>only registered users here</small></h2>
+    </div>
+    @if (Model.Users.Count == 0)
+    {
+        <div class="alert alert-info">
+            There are no users so far
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Auth Count</th>
+                    <th>Registered At</th>
+                    <th>Last Activity At</th>
+                    <th>Tasks</th>
+                    <th>N</th>
+                    <th>P</th>
+                    <th>D</th>
+                    <th>C</th>
+                </tr>
+            </thead>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.Email</td>
+                    <td>@user.AuthenticationCount</td>
+                    <td>@user.RegisteredAt</td>
+                    <td>@user.LastActivityAt</td>
+                    <td>@user.TaskCount</td>
+                    <td>@user.NotStartedTaskCount</td>
+                    <td>@user.InProgressTaskCount</td>
+                    <td>@user.DoneTaskCount</td>
+                    <td>@user.CompleteTaskCount</td>
+                </tr>
+            }
+        </table>
+    }
+    
+    <div class="page-header">
+        <h2>Almost users <small>pending account confirmation</small></h2>
+    </div>
+    @if (Model.PendingUsers.Count == 0)
+    {
+        <div class="alert alert-info">
+            There are no pending users so far
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Secret</th>
+                    <th>Confirm</th>
+                </tr>
+            </thead>
+            @foreach (var pendingUser in Model.PendingUsers)
+            {
+                <tr>
+                    <td>@pendingUser.PendingUserId</td>
+                    <td>@pendingUser.Email</td>
+                    <td>@pendingUser.Secret</td>
+                    <td><a href="@Url.Action("Confirm", "Account", new { secret = pendingUser.Secret})" class="btn btn-primary btn-small">Confirm</a></td>
+                </tr>
+            }
+        </table>
+    }
+    
+    <div class="page-header">
+        <h2>Password reset requests</h2>
+    </div>
+    @if (Model.PendingPasswordResets.Count == 0)
+    {
+        <div class="alert alert-info">
+            There are no pending password resets
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Secret</th>
+                    <th>Reset</th>
+                </tr>
+            </thead>
+            @foreach (var pendingPasswordReset in Model.PendingPasswordResets)
+            {
+                <tr>
+                    <td>@pendingPasswordReset.Email</td>
+                    <td>@pendingPasswordReset.Secret</td>
+                    <td><a href="@Url.Action("Reset", "Account", new { secret = pendingPasswordReset.Secret})" class="btn btn-primary btn-small">Reset</a></td>
+                </tr>
+            }
+        </table>
+    }
+
+    <form method="POST" action="@Url.Action("RebuildDatabase")">
+        <button class="btn btn-danger btn-large" type="submit">Rebuild database</button>
+    </form>
+</div>

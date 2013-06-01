@@ -1,0 +1,285 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+  
+  <PropertyGroup>
+    <BuildDir>$(MSBuildProjectDirectory)\Build</BuildDir>
+    <AssemblyVersion Condition="'$(AssemblyVersion)'==''">1.2.3.4</AssemblyVersion>
+    <Revision Condition="'$(Revision)'==''">revisionhash</Revision>
+
+    <!-- TODO: deploy as user: username - IISAdminUserName -->
+    <!-- TODO: deploy as user: password - IISAdminPassword -->
+
+    <MsDeployExecutable>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3@InstallPath)msdeploy.exe</MsDeployExecutable>
+
+    <IISDeploymentService Condition="'$(IISDeploymentService)'==''">http://localhost/MSDeployAgentService</IISDeploymentService>
+    <IISAppPath Condition="'$(IISAppPath)'==''">Default Web Site/TodoWebApp</IISAppPath>
+    <IISUseBasicAuth Condition="'$(IISUseBasicAuth)'==''">false</IISUseBasicAuth>
+    <AppConnectionString Condition="'$(AppConnectionString)'==''">msbuild connection string</AppConnectionString>
+    <AppWebConfig>$(MSBuildProjectDirectory)\WebApp\Web.config</AppWebConfig>
+    <ServiceAppConfig>$(MSBuildProjectDirectory)\Service\App.config</ServiceAppConfig>
+
+    <TestsProjectFile>$(MSBuildProjectDirectory)\ServiceTests\ServiceTests.csproj</TestsProjectFile>
+    <AppProjectFile>$(MSBuildProjectDirectory)\WebApp\WebApp.csproj</AppProjectFile>
+    <AppPackageFile>$(BuildDir)\TodoWebApp-$(AssemblyVersion)-$(Revision).zip</AppPackageFile>
+
+    <EnableNotifications Condition="'$(EnableNotifications)'==''">true</EnableNotifications>
+    <RootUrl Condition="'$(RootUrl)'==''">http://win7dev-home/WebApp/</RootUrl>
+    <SignUpConfirmationUrlTemplate Condition="'$(SignUpConfirmationUrlTemplate)'==''">http://win7dev-home/WebApp/Account/Confirm/?secret={0}</SignUpConfirmationUrlTemplate>
+    <ResetPasswordUrlTemplate Condition="'$(ResetPasswordUrlTemplate)'==''">http://win7dev-home/WebApp/Account/Reset/?secret={0}</ResetPasswordUrlTemplate>
+    
+    <MailSignUpConfirmationHost Condition="'$(MailSignUpConfirmationHost)'==''">smtp.gmail.com</MailSignUpConfirmationHost>
+    <MailSignUpConfirmationPort Condition="'$(MailSignUpConfirmationPort)'==''">25</MailSignUpConfirmationPort>
+    <MailSignUpConfirmationLogin Condition="'$(MailSignUpConfirmationLogin)'==''">loki2302.todoapp</MailSignUpConfirmationLogin>
+    <MailSignUpConfirmationPassword Condition="'$(MailSignUpConfirmationPassword)'==''">badpassword</MailSignUpConfirmationPassword>
+    <MailSignUpConfirmationSsl Condition="'$(MailSignUpConfirmationSsl)'==''">true</MailSignUpConfirmationSsl>
+    <MailSignUpConfirmationFrom Condition="'$(MailSignUpConfirmationFrom)'==''">loki2302.todoapp@gmail.com</MailSignUpConfirmationFrom>
+
+    <MailWelcomeHost Condition="'$(MailWelcomeHost)'==''">smtp.gmail.com</MailWelcomeHost>
+    <MailWelcomePort Condition="'$(MailWelcomePort)'==''">25</MailWelcomePort>
+    <MailWelcomeLogin Condition="'$(MailWelcomeLogin)'==''">loki2302.todoapp</MailWelcomeLogin>
+    <MailWelcomePassword Condition="'$(MailWelcomePassword)'==''">badpassword</MailWelcomePassword>
+    <MailWelcomeSsl Condition="'$(MailWelcomeSsl)'==''">true</MailWelcomeSsl>
+    <MailWelcomeFrom Condition="'$(MailWelcomeFrom)'==''">loki2302.todoapp@gmail.com</MailWelcomeFrom>
+
+    <MailResetPasswordHost Condition="'$(MailResetPasswordHost)'==''">smtp.gmail.com</MailResetPasswordHost>
+    <MailResetPasswordPort Condition="'$(MailResetPasswordPort)'==''">25</MailResetPasswordPort>
+    <MailResetPasswordLogin Condition="'$(MailResetPasswordLogin)'==''">loki2302.todoapp</MailResetPasswordLogin>
+    <MailResetPasswordPassword Condition="'$(MailResetPasswordPassword)'==''">badpassword</MailResetPasswordPassword>
+    <MailResetPasswordSsl Condition="'$(MailResetPasswordSsl)'==''">true</MailResetPasswordSsl>
+    <MailResetPasswordFrom Condition="'$(MailResetPasswordFrom)'==''">loki2302.todoapp@gmail.com</MailResetPasswordFrom>
+    
+    <SessionTtlSeconds Condition="'$(SessionTtlSeconds)'==''">600</SessionTtlSeconds>
+    <DebugAspNetCompilation Condition="'$(DebugAspNetCompilation)'==''">true</DebugAspNetCompilation>
+  
+    <MigrateAppExecutableAtPackagesFolder>$(MSBuildProjectDirectory)\packages\EntityFramework.5.0.0\tools\migrate.exe</MigrateAppExecutableAtPackagesFolder>
+    <MigrateAppConfigAtPackagesFolder>$(MSBuildProjectDirectory)\packages\EntityFramework.5.0.0\tools\Redirect.config</MigrateAppConfigAtPackagesFolder>
+  </PropertyGroup>
+
+  <Target Name="CreateEmptyBuildDirectory">
+    <RemoveDir Directories="$(BuildDir)" Condition = "Exists('$(BuildDir)')" />
+    <MakeDir Directories = "$(BuildDir)" />
+  </Target>
+
+  <Target Name="UpdateAssemblyVersions">
+    <PropertyGroup>
+      <GeneratedAssemblyInfoFile>$(BuildDir)\AssemblyInfo.cs</GeneratedAssemblyInfoFile>
+    </PropertyGroup>
+
+    <AssemblyInfo CodeLanguage="CS"
+                  OutputFile="$(GeneratedAssemblyInfoFile)"
+                  AssemblyProduct="$(Revision)"
+                  AssemblyVersion="$(AssemblyVersion)"
+                  AssemblyFileVersion="$(AssemblyVersion)" />
+
+    <ItemGroup>
+      <AssemblyInfosToUpdate Include="$(MSBuildProjectDirectory)\**\AssemblyInfo.cs" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(AssemblyInfosToUpdate->'$(GeneratedAssemblyInfoFile)')"
+          DestinationFiles="@(AssemblyInfosToUpdate)" />
+  </Target>
+  
+  <Target Name="BuildServiceTests">
+    <MSBuild Projects="$(TestsProjectFile)"
+             Properties="Configuration=Release;OutDir=$(BuildDir)\;"></MSBuild>
+  </Target>
+
+  <Target Name="UpdateAppConfiguration">
+    <!-- CONNECTION STRING -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/connectionStrings/add[@name='TodoConnectionString']/@connectionString"
+               Value="$(AppConnectionString)" />
+    
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(ServiceAppConfig)"
+               Xpath="//configuration/connectionStrings/add[@name='TodoConnectionString']/@connectionString"
+               Value="$(AppConnectionString)" />
+
+    <!-- ROOT URL TEMPLATE -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+           XmlFileName="$(AppWebConfig)"
+           Xpath="//configuration/appSettings/add[@key='RootUrl']/@value"
+           Value="$(RootUrl)" />
+    
+    <!-- SIGN UP CONFIRMATION URL TEMPLATE -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+           XmlFileName="$(AppWebConfig)"
+           Xpath="//configuration/appSettings/add[@key='SignUpConfirmationUrlTemplate']/@value"
+           Value="$(SignUpConfirmationUrlTemplate)" />
+
+    <!-- RESET PASSWORD URL TEMPLATE -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+           XmlFileName="$(AppWebConfig)"
+           Xpath="//configuration/appSettings/add[@key='ResetPasswordUrlTemplate']/@value"
+           Value="$(ResetPasswordUrlTemplate)" />
+    
+    <!-- NOTIFICATIONS -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+           XmlFileName="$(AppWebConfig)"
+           Xpath="//configuration/appSettings/add[@key='EnableNotifications']/@value"
+           Value="$(EnableNotifications)" />
+
+    <!-- MAIL - Sign Up Confirmation -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='SignUpConfirmationEmailSender']/@host"
+               Value="$(MailSignUpConfirmationHost)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='SignUpConfirmationEmailSender']/@port"
+               Value="$(MailSignUpConfirmationPort)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='SignUpConfirmationEmailSender']/@login"
+               Value="$(MailSignUpConfirmationLogin)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='SignUpConfirmationEmailSender']/@password"
+               Value="$(MailSignUpConfirmationPassword)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='SignUpConfirmationEmailSender']/@ssl"
+               Value="$(MailSignUpConfirmationSsl)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='SignUpConfirmationEmailSender']/@from"
+               Value="$(MailSignUpConfirmationFrom)" />
+
+    <!-- MAIL - Welcome -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='WelcomeEmailSender']/@host"
+               Value="$(MailWelcomeHost)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='WelcomeEmailSender']/@port"
+               Value="$(MailWelcomePort)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='WelcomeEmailSender']/@login"
+               Value="$(MailWelcomeLogin)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='WelcomeEmailSender']/@password"
+               Value="$(MailWelcomePassword)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='WelcomeEmailSender']/@ssl"
+               Value="$(MailWelcomeSsl)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='WelcomeEmailSender']/@from"
+               Value="$(MailWelcomeFrom)" />
+
+    <!-- MAIL - Password reset -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='ResetPasswordEmailSender']/@host"
+               Value="$(MailResetPasswordHost)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='ResetPasswordEmailSender']/@port"
+               Value="$(MailResetPasswordPort)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='ResetPasswordEmailSender']/@login"
+               Value="$(MailResetPasswordLogin)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='ResetPasswordEmailSender']/@password"
+               Value="$(MailResetPasswordPassword)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='ResetPasswordEmailSender']/@ssl"
+               Value="$(MailResetPasswordSsl)" />
+
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/mailSettings/senders/add[@name='ResetPasswordEmailSender']/@from"
+               Value="$(MailResetPasswordFrom)" />
+  
+    <!-- SESSION -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/appSettings/add[@key='SessionTtlSeconds']/@value"
+               Value="$(SessionTtlSeconds)" />
+    
+    <!-- ASP.NET COMPILATION -->
+    <XmlUpdate Namespace="http://schemas.microsoft.com/.NetConfiguration/v4.0"
+               XmlFileName="$(AppWebConfig)"
+               Xpath="//configuration/system.web/compilation/@debug"
+               Value="$(DebugAspNetCompilation)" />
+  </Target>
+  
+  <Target Name="BuildDeploymentPackage">
+    <MSBuild Projects="$(AppProjectFile)"
+             Properties="Configuration=Release;
+                          OutDir=$(BuildDir)\;
+                          DeployOnBuild=true;
+                          DeployTarget=Package;
+                          DeployIISAppPath=$(IISAppPath);
+                          PackageLocation=$(AppPackageFile);" />
+  </Target>
+  
+  <Target Name="UpdateDatabase">
+    <ItemGroup>
+      <MigrateExeAtPackagesFolder Include="$(MigrateAppExecutableAtPackagesFolder)" />
+      <MigrateExeConfigAtPackagesFolder Include="$(MigrateAppConfigAtPackagesFolder)" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <MigrateAppFileName>migrate.exe</MigrateAppFileName>
+      <AssemblyName>Service</AssemblyName>
+    </PropertyGroup>
+
+    <Copy SourceFiles="@(MigrateExeAtPackagesFolder)" DestinationFolder="$(BuildDir)" />
+    <Copy SourceFiles="@(MigrateExeConfigAtPackagesFolder)" DestinationFiles="$(BuildDir)\$(MigrateAppFileName).config" />
+    
+    <Exec WorkingDirectory="$(BuildDir)" 
+          Command="$(MigrateAppFileName) $(AssemblyName) /startupConfigurationFile:$(AssemblyName).dll.config" />
+  </Target>
+  
+  <Target Name="DeployApplication" DependsOnTargets="BuildDeploymentPackage">
+    <PropertyGroup>
+      <QuotedIISDeploymentService>&quot;$(IISDeploymentService)&quot;</QuotedIISDeploymentService>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <DestComponents Include="auto" />
+      <DestComponents Include="computerName=$(QuotedIISDeploymentService)" />
+      <DestComponents Include="includeAcls=&quot;False&quot;" />
+      <DestComponents Include="userName=&quot;$(IISAdminUserName)&quot;" Condition="'$(IISAdminUserName)'!=''" />
+      <DestComponents Include="password=&quot;$(IISAdminPassword)&quot;" Condition="'$(IISAdminPassword)'!=''" />
+      <DestComponents Include="authType=&quot;basic&quot;" Condition="'$(IISUseBasicAuth)'=='true'" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <DestParam>@(DestComponents, ',')</DestParam>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Param Include="-source:package=&quot;$(AppPackageFile)&quot;" />
+      <Param Include="-dest:$(DestParam)" />
+      <Param Include="-verb:sync" />
+    </ItemGroup>
+
+    <Exec Command="&quot;$(MsDeployExecutable)&quot; @(Param, ' ')" />
+  </Target>
+</Project>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>pagedown.bootstrap</id>
+    <version>0.9.2</version>
+    <title>pagedown.bootstrap</title>
+    <authors>thoemmi</authors>
+    <owners>thoemmi</owners>
+    <licenseUrl>https://github.com/thoemmi/pagedown/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/thoemmi/pagedown</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A modified version of pagedown, a converter and editor for Markdown, to work with Bootstrap</description>
+    <releaseNotes />
+    <copyright>Copyright 2013</copyright>
+    <language />
+    <tags>pagedown markdown bootstrap</tags>
+    <dependencies>
+      <dependency id="Twitter.Bootstrap" version="2.2.0" />
+    </dependencies>
+  </metadata>
+</package>

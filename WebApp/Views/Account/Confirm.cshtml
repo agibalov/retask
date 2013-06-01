@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "~/Views/Shared/Message.cshtml";
+}
+
+@section Message
+{
+    <p class="lead">
+        <strong>We didn't manage to activate your account</strong><br/>
+        Here's what we think had happened: <strong>&laquo;@Html.ViewBag.Message&raquo;</strong>
+        <br/>
+        Please try to <a href="@Url.Action("SignUp")">sign up</a> one more time.
+    </p>    
+}

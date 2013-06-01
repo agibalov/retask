@@ -1,0 +1,8 @@
+﻿<h2>RebuildDatabase</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-error">
+        @Html.ValidationSummary(true, "Failed to rebuild database")
+    </div>
+}

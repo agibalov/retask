@@ -1,0 +1,198 @@
+﻿@using System.Web.Optimization
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html ng-app="app">
+    <head>
+        <title>RETASK</title>
+        
+        <link rel="icon" type="image/ico" href="@Url.Content("~/Content/favicon.ico")" />
+        <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800,300' />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/js")
+        
+        <script type="text/javascript">
+            angular.module("app").constant("templatesRoot", "@Url.Content("~/Content/App/")");
+            angular.module("app").constant("landingPageUrl", "@Url.Action("Index", "Home")");
+            angular.module("app").constant("adminPageUrl", "@Url.Action("Index", "Admin")");
+            angular.module("app").constant("pingPeriod", 10);
+            angular.module("app").constant("getUserInfoUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "GetUserInfo" })");
+            angular.module("app").constant("pingUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "Ping" })");
+            angular.module("app").constant("createTaskUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "CreateTask" })");
+            angular.module("app").constant("updateTaskUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "UpdateTask" })");
+            angular.module("app").constant("progressTaskUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "ProgressTask" })");
+            angular.module("app").constant("unprogressTaskUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "UnprogressTask" })");
+            angular.module("app").constant("deleteTaskUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "DeleteTask" })");
+            angular.module("app").constant("getWorkspaceUrl", "@Url.HttpRouteUrl("DefaultApi", new { controller = "RetaskApi", action = "GetWorkspace" })");
+        </script>
+    </head>
+    
+    <body ng-controller="TodoController">
+        <div id="fb-root"></div>
+        <script>(function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+        <div class="loading-indicator" loading-indicator loading-class="loading">
+            <i class="icon-spinner icon-spin icon-2x"></i>
+        </div>
+        
+        <div id="wrap">
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <ul class="nav nav-pills pull-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ userEmail }} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li ng-show="isAdmin"><a href="{{adminPageUrl}}">Rule the World</a></li>
+                                <li ng-show="isAdmin" class="divider"></li>
+                                <li><a href="@Url.Action("SignOut", "Account")">Sign Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="logo"></div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="btn-toolbar">
+                            <button class="btn btn-large btn-green" ng-click="CreateTaskClicked()">Create Task</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span4">
+                        <div class="swimlane-header">
+                            <h2>To do <small>not started yet</small></h2>
+                        </div>
+                        <todo ng-repeat="item in getNotDone()"
+                              model="item"
+                              wont-do-clicked="WontDoClicked(item)"
+                              start-clicked="StartClicked(item)"
+                              edit-clicked="EditClicked(item)"></todo>
+                    </div>
+                    <div class="span4">
+                        <div class="swimlane-header">
+                            <h2>In progress <small>doing right now</small></h2>
+                        </div>
+                        <todo ng-repeat="item in getInProgress()"
+                              model="item"
+                              postpone-clicked="PostponeClicked(item)"
+                              done-clicked="DoneClicked(item)"
+                              edit-clicked="EditClicked(item)"></todo>
+                    </div>
+                    <div class="span4">
+                        <div class="swimlane-header">
+                            <h2>Done <small>already completed</small></h2>
+                        </div>
+                        <todo ng-repeat="item in getDone()"
+                              model="item"
+                              not-done-clicked="NotDoneClicked(item)"
+                              complete-clicked="CompleteClicked(item)"
+                              edit-clicked="EditClicked(item)"></todo>
+                    </div>
+                </div>
+            </div>
+            <div id="push"></div>
+        </div>
+        <div id="footer">
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span4 muted credit">
+                        &copy; 2013 by <a href="http://loki2302.me" target="_blank">loki2302</a> 
+                    </div>
+                    <div class="span4 social">
+                        <!-- Tweet button -->
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://retask.me" data-text="Check this out!" data-via="retaskapp" data-count="none">Tweet</a>
+                        <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+
+                        <!-- Follow button -->
+                        <a href="https://twitter.com/retaskapp" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @@retaskapp</a>
+                        <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+                        
+                        <!-- Facebook like button -->
+                        <div class="fb-like" data-href="https://www.facebook.com/retaskapp" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false"></div>
+                    </div>
+                    <div class="span4 muted credit text-right">
+                        <a href="@Url.Action("Disclaimer", "Home")" target="_blank">Disclaimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="create-todo-modal" class="modal hide fade" ng-controller="CreateTaskController">
+            <div class="modal-header">
+                <h3>New Task</h3>
+            </div>
+            <div class="modal-body">
+                <textarea rows="16" class="input-block-level" ng-model="taskDescription" placeholder="Type task description here"></textarea>
+                <div class="alert alert-error" ng-hide="taskDescriptionErrors.length == 0">
+                    <ul>
+                        <li ng-repeat="error in taskDescriptionErrors">{{error}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left hint">
+                    You can use <a href="http://en.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> here.
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-large" ng-click="cancelClicked()">Cancel</button>
+                    <button class="btn btn-large btn-green" ng-click="saveClicked()">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-todo-modal" class="modal hide fade" ng-controller="EditTaskController">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+            </div>
+            <div class="modal-body">
+                <textarea rows="16" class="input-block-level" ng-model="taskDescription" placeholder="Type task description here"></textarea>
+                <div class="alert alert-error" ng-hide="taskDescriptionErrors.length == 0">
+                    <ul>
+                        <li ng-repeat="error in taskDescriptionErrors">{{error}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left hint">
+                    You can use <a href="http://en.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> here.
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-large" ng-click="cancelClicked()">Cancel</button>
+                    <button class="btn btn-large btn-green" ng-click="saveClicked()">Save</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal hide" id="errorModal" error-modal data-backdrop="static">
+            <div class="modal-body">
+                <p class="lead text-center">
+                    Something weird happened,<br/>but don't give up - F5 may help.
+                </p>
+                <p>
+                    If it doesn't help, try going <a href="@Url.Action("Index", "Home")">here</a>. 
+                    If nothing helps, please contact <strong>support(at)retask.me</strong>
+                </p>
+            </div>
+        </div>
+         
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-40097924-1', 'retask.me');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>

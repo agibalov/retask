@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "~/Views/Shared/Message.cshtml";
+}
+
+@section Message
+{
+    <p class="lead">
+        <strong># 404. Looks like you're trying to get something we don't have here.</strong>
+        <br/> 
+        Please check if URL is OK and reload the page, or just go <a href="@Url.Action("Index", "Home")">here</a>.
+    </p>
+}

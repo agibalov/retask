@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{21BEE215-1908-402A-B566-7DC8F781829D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Service</RootNamespace>
+    <AssemblyName>Service</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\packages\FluentValidation.3.4.6.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\packages\RazorEngine.3.2.0\lib\net40\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAL\Migrations\201305132050334_AddUserToPendingPasswordResetRelationship.cs" />
+    <Compile Include="DAL\Migrations\201305132050334_AddUserToPendingPasswordResetRelationship.Designer.cs">
+      <DependentUpon>201305132050334_AddUserToPendingPasswordResetRelationship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Migrations\201305162006217_AddSessionLastAccessTime.cs" />
+    <Compile Include="DAL\Migrations\201305162006217_AddSessionLastAccessTime.Designer.cs">
+      <DependentUpon>201305162006217_AddSessionLastAccessTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Migrations\201305191228411_AddUserSignUpActivityTimeAndAuthenticationCount.cs" />
+    <Compile Include="DAL\Migrations\201305191228411_AddUserSignUpActivityTimeAndAuthenticationCount.Designer.cs">
+      <DependentUpon>201305191228411_AddUserSignUpActivityTimeAndAuthenticationCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Migrations\201305251531320_AddIsAdminFlagToUser.cs" />
+    <Compile Include="DAL\Migrations\201305251531320_AddIsAdminFlagToUser.Designer.cs">
+      <DependentUpon>201305251531320_AddIsAdminFlagToUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DTO\PendingPasswordResetDTO.cs" />
+    <Compile Include="DAL\Migrations\201305091753403_InitialCreate.cs" />
+    <Compile Include="DAL\Migrations\201305091753403_InitialCreate.Designer.cs">
+      <DependentUpon>201305091753403_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Migrations\Configuration.cs" />
+    <Compile Include="Exceptions\RetaskServiceErrorMessageProvider.cs" />
+    <Compile Include="TransactionScripts\BL\ITimeProvider.cs" />
+    <Compile Include="TransactionScripts\BL\SecretGenerator.cs" />
+    <Compile Include="TransactionScripts\BL\UtcNowTimeProvider.cs" />
+    <Compile Include="Validation\Requests\PingRequest.cs" />
+    <Compile Include="TransactionScripts\PingTransactionScript.cs" />
+    <Compile Include="Validation\Requests\ChangePasswordRequest.cs" />
+    <Compile Include="TransactionScripts\ChangePasswordTransactionScript.cs" />
+    <Compile Include="DAL\PendingPasswordReset.cs" />
+    <Compile Include="DAL\PendingUser.cs" />
+    <Compile Include="DTO\DebugDTO.cs" />
+    <Compile Include="DTO\PendingUserDTO.cs" />
+    <Compile Include="DTO\UserInfoDTO.cs" />
+    <Compile Include="Infrastructure\Mail\Configuration\MailSettingsConfigurationSection.cs" />
+    <Compile Include="Infrastructure\Mail\Configuration\SenderConfigurationCollection.cs" />
+    <Compile Include="Infrastructure\Mail\Configuration\SenderConfigurationElement.cs" />
+    <Compile Include="Infrastructure\Mail\NullEmailSender.cs" />
+    <Compile Include="Infrastructure\Notifiers\NullResetPasswordNotifier.cs" />
+    <Compile Include="Infrastructure\Notifiers\NullSignUpConfirmationNotifier.cs" />
+    <Compile Include="Infrastructure\Notifiers\NullWelcomeNotifier.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Validation\Requests\RequestPasswordResetRequest.cs" />
+    <Compile Include="TransactionScripts\RequestPasswordResetTransactionScript.cs" />
+    <Compile Include="Validation\Requests\ResetPasswordRequest.cs" />
+    <Compile Include="TransactionScripts\ResetPasswordTransactionScript.cs" />
+    <Compile Include="TransactionScripts\BL\AuthenticationService.cs" />
+    <Compile Include="Infrastructure\Mail\EmailSender.cs" />
+    <Compile Include="Infrastructure\Mail\IEmailSender.cs" />
+    <Compile Include="Infrastructure\RazorTemplateRenderer.cs" />
+    <Compile Include="Infrastructure\Notifiers\IResetPasswordNotifier.cs" />
+    <Compile Include="Infrastructure\Notifiers\IWelcomeNotifier.cs" />
+    <Compile Include="Infrastructure\Notifiers\MailingResetPasswordNotifier.cs" />
+    <Compile Include="Infrastructure\Notifiers\MailingWelcomeNotifier.cs" />
+    <Compile Include="TransactionScripts\ConfirmSignUpRequestTransactionScript.cs" />
+    <Compile Include="TransactionScripts\GetUserInfoTransactionScript.cs" />
+    <Compile Include="Validation\Requests\CreateTaskRequest.cs" />
+    <Compile Include="TransactionScripts\CreateTaskTransactionScript.cs" />
+    <Compile Include="DAL\Session.cs" />
+    <Compile Include="DAL\Task.cs" />
+    <Compile Include="DAL\TaskStatus.cs" />
+    <Compile Include="DAL\TodoContext.cs" />
+    <Compile Include="DTO\TaskDTO.cs" />
+    <Compile Include="DTO\WorkspaceDTO.cs" />
+    <Compile Include="Exceptions\ServiceError.cs" />
+    <Compile Include="DTO\ServiceResult.cs" />
+    <Compile Include="DTO\SessionDTO.cs" />
+    <Compile Include="Validation\Requests\GetUserInfoRequest.cs" />
+    <Compile Include="Validation\Requests\GetWorkspaceRequest.cs" />
+    <Compile Include="Validation\Validators\ChangePasswordRequestValidator.cs" />
+    <Compile Include="Validation\Validators\GetUserInfoRequestValidator.cs" />
+    <Compile Include="Validation\Validators\GetWorkspaceRequestValidator.cs" />
+    <Compile Include="Validation\Validators\CreateTaskRequestValidator.cs" />
+    <Compile Include="Validation\Requests\DeleteTaskRequest.cs" />
+    <Compile Include="TransactionScripts\DeleteTaskTransactionScript.cs" />
+    <Compile Include="TransactionScripts\GetWorkspaceTransactionScript.cs" />
+    <Compile Include="Infrastructure\Notifiers\ISignUpConfirmationNotifier.cs" />
+    <Compile Include="Infrastructure\Notifiers\MailingSignUpConfirmationNotifier.cs" />
+    <Compile Include="Validation\Validators\DeleteTaskRequestValidator.cs" />
+    <Compile Include="Validation\Requests\ProgressTaskRequest.cs" />
+    <Compile Include="TransactionScripts\ProgressTaskTransactionScript.cs" />
+    <Compile Include="TransactionScripts\GetDebugDataTransactionScript.cs" />
+    <Compile Include="TransactionScripts\RebuildDatabaseTransactionScript.cs" />
+    <Compile Include="TransactionScripts\SignInTransactionScript.cs" />
+    <Compile Include="Validation\Validators\PingRequestValidator.cs" />
+    <Compile Include="Validation\Validators\ProgressTaskRequestValidator.cs" />
+    <Compile Include="Validation\Requests\UnprogressTaskRequest.cs" />
+    <Compile Include="Validation\Validators\RequestPasswordResetRequestValidator.cs" />
+    <Compile Include="Validation\Validators\ResetPasswordRequestValidator.cs" />
+    <Compile Include="Validation\Validators\UnprogressTaskRequestValidator.cs" />
+    <Compile Include="Validation\Requests\UpdateTaskRequest.cs" />
+    <Compile Include="Validation\Requests\SignUpConfirmationRequest.cs" />
+    <Compile Include="Validation\Validators\UpdateTaskRequestValidator.cs" />
+    <Compile Include="Validation\Validators\SignUpConfirmationRequestValidator.cs" />
+    <Compile Include="Exceptions\TodoException.cs" />
+    <Compile Include="RetaskService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DAL\User.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
+    <Compile Include="Mappers\TaskToTaskDTOMapper.cs" />
+    <Compile Include="TransactionScripts\SignUpTransactionScript.cs" />
+    <Compile Include="TransactionScripts\BL\TaskProgressLogic.cs" />
+    <Compile Include="TransactionScripts\UnprogressTaskTransactionScript.cs" />
+    <Compile Include="TransactionScripts\UpdateTaskTransactionScript.cs" />
+    <Compile Include="Validation\Requests\SignInRequest.cs" />
+    <Compile Include="Validation\Requests\TaskRequest.cs" />
+    <Compile Include="Validation\Validators\SignInRequestValidator.cs" />
+    <Compile Include="Validation\Requests\SignUpRequest.cs" />
+    <Compile Include="Validation\Validators\SignUpRequestValidator.cs" />
+    <Compile Include="Validation\ValidationConfiguration.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\SignUpConfirmationEmailTemplate.cshtml" />
+    <None Include="Resources\WelcomeEmailTemplate.cshtml" />
+    <None Include="Resources\ResetPasswordEmailTemplate.cshtml" />
+    <Content Include="App.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DAL\Migrations\201305091753403_InitialCreate.resx">
+      <DependentUpon>201305091753403_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201305132050334_AddUserToPendingPasswordResetRelationship.resx">
+      <DependentUpon>201305132050334_AddUserToPendingPasswordResetRelationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201305162006217_AddSessionLastAccessTime.resx">
+      <DependentUpon>201305162006217_AddSessionLastAccessTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201305191228411_AddUserSignUpActivityTimeAndAuthenticationCount.resx">
+      <DependentUpon>201305191228411_AddUserSignUpActivityTimeAndAuthenticationCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201305251531320_AddIsAdminFlagToUser.resx">
+      <DependentUpon>201305251531320_AddIsAdminFlagToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

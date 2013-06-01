@@ -1,0 +1,62 @@
+﻿@model WebApp.Infrastructure.ApiModel
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <h2>Retask API</h2>
+
+            @foreach (var method in Model.Methods)
+            {
+                <hr/>
+                <div class="page-header">
+                    <h3>@method.Name <span class="label label-info">@method.HttpVerb</span> <small>@method.RelativeUrl</small></h3>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Do what</dt>
+                    <dd>@method.Description</dd>
+                    <dt>Parameters</dt>
+                    <dd>
+                        <ul class="unstyled">
+                            @foreach (var parameter in method.Parameters)
+                            {
+                                <li>
+                                    <h5>
+                                        @parameter.ParameterName 
+                                        <span class="label label-inverse">@parameter.Source</span> 
+                                        <small class="muted">@parameter.Description</small>
+                                    </h5>
+                                    <p>
+                                        @if (!parameter.Sample.Contains(Environment.NewLine))
+                                        {
+                                            @:Should be something like <code>@parameter.Sample</code>
+                                        }
+                                        else
+                                        {
+                                            @:Should be something like 
+                                            <pre>
+@parameter.Sample</pre>
+                                        }
+                                    </p>
+                                    <hr/>
+                                </li>
+                            }
+                        </ul>
+                    </dd>
+                    <dt>Returns</dt>
+                    <dd>
+                        @if (!method.ReturnSample.Contains(Environment.NewLine))
+                        {
+                            @:Something like <code>@method.ReturnSample</code>
+                        }
+                        else
+                        {
+                            @:Something like:
+                            <pre>
+@method.ReturnSample</pre>
+                        }        
+                    </dd>
+                </dl>
+            }
+        </div>
+    </div>
+</div>

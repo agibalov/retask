@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "~/Views/Shared/Message.cshtml";
+}
+
+@section Message
+{
+    <p class="lead">
+        <strong>Congratulations! You have just activated your account!</strong><br/>
+        You can now <a href="@Url.Action("SignIn")">sign in</a>.
+    </p>    
+}

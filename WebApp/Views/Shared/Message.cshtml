@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="span12 text-center">
+            <div class="message">
+                @RenderSection("Message", true) 
+            </div>
+        </div>
+    </div>
+</div>

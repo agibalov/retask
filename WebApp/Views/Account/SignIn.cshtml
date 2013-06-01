@@ -1,0 +1,39 @@
+﻿@using WebApp
+@model WebApp.Models.SignInModel
+
+<div class="registration-form">
+    <div class="container">
+        <h1>Sign in</h1>
+
+        <form class="form-horizontal" method="POST" action="@Url.Action("SignIn", "Account", new { returnUrl = Url.Action("Index", "App")})">
+            <div class="control-group @Html.AddClassIfPropertyInError(x => x.Email, "error")">
+                <label class="control-label">Email</label>
+                <div class="controls">
+                    <input type="text" placeholder="Email" name="Email" value="@Html.ValueFor(x => x.Email)" />
+                    <span class="help-inline">@Html.ValidationMessageFor(x => x.Email)</span>
+                </div>
+            </div>
+            <div class="control-group @Html.AddClassIfPropertyInError(x => x.Password, "error")">
+                <label class="control-label">Password</label>
+                <div class="controls">
+                    <input type="password" placeholder="Password" name="Password" />
+                    <span class="help-inline">@Html.ValidationMessageFor(x => x.Password)</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <p>
+                        <a href="@Url.Action("ForgotPassword", "Account")">Forgot password</a>
+                    </p>
+                    <button class="btn btn-large btn-green" type="submit">Sign In</button>
+                </div>
+            </div>
+        </form>
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <div class="alert alert-error">
+                @ViewBag.Message
+            </div>
+        }
+    </div>
+</div>

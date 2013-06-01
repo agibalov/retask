@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "~/Views/Shared/Message.cshtml";
+}
+
+@section Message
+{
+    <p class="lead">
+        <strong>Congratulations! You have just changed your password!</strong>
+        <br/>
+        You can now <a href="@Url.Action("SignIn")">sign in</a> with your new password.
+    </p>    
+}

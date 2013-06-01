@@ -1,0 +1,321 @@
+﻿body, .btn, input {
+    font-family: 'Open Sans', sans-serif;
+}
+
+input[type="text"], 
+input[type="text"]:hover, 
+input[type="text"]:focus, 
+input[type="text"]:active,
+input[type="password"], 
+input[type="password"]:hover, 
+input[type="password"]:focus, 
+input[type="password"]:active,
+textarea, 
+textarea:hover, 
+textarea:focus, 
+textarea:active {
+    box-shadow: none;
+}
+
+input[type="text"]:focus,
+input[type="text"]:active,
+input[type="password"]:focus,
+input[type="password"]:active,
+textarea:focus,
+textarea:active {
+    border-color: rgb(151, 179, 80);
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    min-width: 960px;
+}
+
+#logo {
+    width: 122px;
+    height: 34px;
+    background: url(retasklogo.png);
+    margin: 10px 0;
+    margin-left: -5px;
+}
+
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -60px;
+}
+
+#push, #footer {
+    height: 60px;
+}
+
+#footer {
+    background-color: #444;
+}
+
+.registration-form {
+    background-color: #eee;
+}
+
+.registration-form h1 {
+    color: #777;
+    text-transform: uppercase;
+    font-size: 25px;
+}
+
+.registration-form .control-group.error .control-label,
+.registration-form .control-group.error .controls .help-inline {
+    color: rgb(255, 102, 0);
+}
+
+.registration-form .control-group.error .controls input {
+    border-color: rgb(255, 102, 0);
+    color: rgb(255, 102, 0);
+}
+
+.registration-form .control-group.error .controls input:active,
+.registration-form .control-group.error .controls input:focus {
+    box-shadow: none;
+}
+
+.nav-pills a,
+.nav-pills a:hover,
+.nav-pills a:focus,
+.nav-pills a:active {
+    color: rgb(151, 179, 80);
+    background: none;
+    border-radius: 0;
+}
+
+.nav .dropdown-toggle .caret {
+    border-top-color: #333;
+    border-bottom-color: #333;
+}
+
+.nav-pills .dropdown-menu {
+    box-shadow: none;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:active,
+.dropdown-menu > li > a:focus {
+    background: none;
+    background-color: rgb(151, 179, 80);
+}
+
+.nav-pills > li > a,
+.nav-pills > li > a:hover,
+.nav-pills > li > a:focus,
+.nav-pills > li > a:active {
+    border-radius: 0;
+    background: none;
+}
+
+#footer a {
+    color: rgb(151, 179, 80);
+}
+
+.credit {
+    margin-top: 20px;
+}
+
+.btn {
+    text-transform: uppercase;
+}
+
+.btn-large {
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px 20px;
+}
+
+.btn, .btn:hover, .btn:focus {
+    border-radius: 0;
+    transition: background-color 0.2s;
+    background-position: 0 0;
+    background-image: none;
+    border: none;
+    text-shadow: none;
+}
+
+.btn, .btn:hover, .btn:focus {
+    color: #fff;
+}
+
+.btn {
+    background-color: #333;
+}
+
+.btn:hover, .btn:focus {
+    background-color: #555;
+}
+
+.btn-green {
+    background-color: rgb(176, 214, 79);
+}
+
+.btn-green:hover, .btn-green:focus {
+    background-color: rgb(151, 179, 80);
+}
+
+input[type=text], input[type=password], textarea {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.modal {
+    border-radius: 0;
+}
+
+.modal-header {
+    border-bottom: none;
+    background-color: rgb(176, 214, 79);
+    color: #fff;
+}
+
+.modal-footer {
+    background-color: #fff;
+    border-top: none;
+}
+
+.nav-pills .dropdown-menu {
+    border-radius: 0;
+}
+
+.loading-indicator {
+    position: fixed;
+    text-align: center;
+    left: 50%;
+    top: 0;
+    width: 100px;
+    margin-left: -50px;
+    background-color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 10px;
+    transition: opacity 0.1s;
+    opacity: 0.0;
+}
+
+.loading {
+    opacity: 1.0;
+}
+
+.jumbotron {
+    width: 100%;
+    background-color: rgb(176, 214, 79);
+    padding: 20px 0 10px 0;
+}
+
+.calltoaction {
+    margin: 30px 0;
+}
+
+.calltoaction a {
+    width: 100px;
+}
+
+.todo {
+    padding: 10px;
+    border: 1px solid #e3e3e3;
+    margin-bottom: 5px;
+}
+
+.todo .description {
+    padding-bottom: 5px;
+    overflow-x: hidden;
+}
+
+.todo .description h1,
+.todo .description h2,
+.todo .description h3,
+.todo .description h4 {
+    padding: 0;
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.todo .description h1 {
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.todo .description h2 {
+    font-size: 22px;
+    line-height: 22px;
+}
+
+.todo .description h3 {
+    font-size: 20px;
+    line-height: 20px;
+}
+
+.todo .description h4 {
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.modal-body textarea {
+    font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+}
+
+.swimlane-header {
+    padding: 0;
+    margin: 0;
+}
+
+.swimlane-header h2 {
+    padding: 0;
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bolder;
+    color: #555;
+}
+
+.swimlane-header h2 small {
+    font-size: 16px;
+}
+
+.hint {
+    line-height: 40px;
+}
+
+.hint a,
+.hint a:hover,
+.hint a:focus,
+.hint a:active {
+    color: rgb(151, 179, 80);
+}
+
+.hint a {
+    text-decoration: none;
+}
+
+.hint a:hover,
+.hint a:focus,
+.hint a:active {
+    text-decoration: underline;
+}
+
+.social {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.fb-like.fb_edge_widget_with_comment.fb_iframe_widget span iframe {
+    bottom: 0 !important;
+}
+
+.message {
+    border: 1px solid rgb(151, 179, 80);
+    padding: 100px 20px;
+}
+
+.message p {
+    padding: 0;
+    margin: 0;
+}

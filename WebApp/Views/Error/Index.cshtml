@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/Message.cshtml";
+}
+
+@section Message
+{
+    <p class="lead">
+        <strong># 500. Whatever you've been trying to do, it didn't work.</strong>
+        <br/>
+        Please make sure you're really doing what you think you're doing.
+        <br/>
+        If it didn't help, just go <a href="@Url.Action("Index", "Home")">here</a>.
+        If nothing helps, please contact <strong>support(at)retask.me</strong>
+    </p>
+}
