@@ -2,15 +2,14 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using Ninject;
-using WebApp.Controllers;
 
 namespace WebApp
 {
-    public class TodoAppControllerFactory : DefaultControllerFactory
+    public class RetaskControllerFactory : DefaultControllerFactory
     {
         private readonly IKernel _kernel;
 
-        public TodoAppControllerFactory(IKernel kernel)
+        public RetaskControllerFactory(IKernel kernel)
         {
             _kernel = kernel;
         }
@@ -19,7 +18,7 @@ namespace WebApp
         {
             if (controllerType == null)
             {
-                return null;
+                return base.GetControllerInstance(requestContext, controllerType);
             }
 
             return (IController)_kernel.Get(controllerType);

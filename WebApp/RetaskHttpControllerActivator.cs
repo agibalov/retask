@@ -6,11 +6,11 @@ using Ninject;
 
 namespace WebApp
 {
-    public class TodoAppHttpControllerActivator : IHttpControllerActivator
+    public class RetaskHttpControllerActivator : IHttpControllerActivator
     {
         private readonly IKernel _kernel;
 
-        public TodoAppHttpControllerActivator(IKernel kernel)
+        public RetaskHttpControllerActivator(IKernel kernel)
         {
             _kernel = kernel;
         }

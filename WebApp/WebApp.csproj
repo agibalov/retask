@@ -166,8 +166,8 @@
     <Compile Include="Models\Validation\SignUpModelValidator.cs" />
     <Compile Include="Configuration\NullNotifiersModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TodoAppControllerFactory.cs" />
-    <Compile Include="TodoAppHttpControllerActivator.cs" />
+    <Compile Include="RetaskControllerFactory.cs" />
+    <Compile Include="RetaskHttpControllerActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

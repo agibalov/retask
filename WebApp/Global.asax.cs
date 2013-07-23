@@ -12,6 +12,7 @@ using Service;
 using Service.Infrastructure.Mail.Configuration;
 using Service.TransactionScripts.BL;
 using WebApp.Configuration;
+using WebApp.Controllers;
 
 namespace WebApp
 {
@@ -60,11 +61,28 @@ namespace WebApp
 
             kernel.Bind<RetaskService>().ToSelf().InSingletonScope();
 
-            var controllerFactory = new TodoAppControllerFactory(kernel);
+            var controllerFactory = new RetaskControllerFactory(kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
 
-            var controllerActivator = new TodoAppHttpControllerActivator(kernel);
+            var controllerActivator = new RetaskHttpControllerActivator(kernel);
             GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerActivator), controllerActivator);
+        }
+
+        protected void Application_EndRequest()
+        {
+            if (Response.StatusCode != 404)
+            {
+                return;
+            }
+
+            Response.Clear();
+
+            var routeData = new RouteData();
+            routeData.Values["controller"] = "Error";
+            routeData.Values["action"] = "NotFound";
+
+            IController controller = new ErrorController();
+            controller.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
         }
     }
 }
