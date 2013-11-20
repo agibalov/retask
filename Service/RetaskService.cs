@@ -34,7 +34,7 @@ namespace Service
         {
             var signInRequest = new SignInRequest
                 {
-                    Email = Emailize(email),
+                    Email = SanitizeEmailAddress(email),
                     Password = password
                 };
 
@@ -48,7 +48,7 @@ namespace Service
         {
             var signUpRequest = new SignUpRequest
                 {
-                    Email = Emailize(email),
+                    Email = SanitizeEmailAddress(email),
                     Password = password
                 };
 
@@ -75,7 +75,7 @@ namespace Service
         {
             var requestPasswordResetRequest = new RequestPasswordResetRequest
                 {
-                    Email = Emailize(email)
+                    Email = SanitizeEmailAddress(email)
                 };
 
             return ExecuteWithExceptionHandling(
@@ -295,8 +295,13 @@ namespace Service
             }
         }
 
-        private static string Emailize(string emailString)
+        private static string SanitizeEmailAddress(string emailString)
         {
+            if (emailString == null)
+            {
+                return null;
+            }
+
             return emailString.Trim().ToLower();
         }
     }
