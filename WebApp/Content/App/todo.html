@@ -1,11 +1,10 @@
 ﻿<div class="todo" ng-class="getStatusClass()">
     <markdown data="model.TaskDescription"></markdown>
-    <!--<div class="description">{{ model.TaskDescription }}</div>-->
     <ng-switch on="model.TaskStatus">
         <div ng-switch-when="0">
-            <button class="btn btn-inverse" ng-click="wontDoClicked()">Won't do</button>
-            <button class="btn btn-inverse" ng-click="editClicked()">Edit</button>
             <button class="btn btn-inverse" ng-click="startClicked()">Start</button>
+            <button class="btn btn-inverse" ng-click="editClicked()">Edit</button>
+            <button class="btn btn-inverse" ng-click="wontDoClicked()">Won't do</button>
         </div>
         <div ng-switch-when="1">
             <button class="btn btn-inverse" ng-click="postponeClicked()">Postpone</button>
